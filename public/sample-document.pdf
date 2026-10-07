@@ -1,0 +1,69 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R 4 0 R] /Count 2 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 5 0 R /Resources << /Font << /F1 7 0 R >> >> >>
+endobj
+4 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 6 0 R /Resources << /Font << /F1 7 0 R >> >> >>
+endobj
+5 0 obj
+<< /Length 517 >>
+stream
+BT
+/F1 18 Tf
+50 720 Td
+(Quantum Computing and Cryptography - Page 1) Tj
+/F1 12 Tf
+0 -40 Td
+(Executive Summary: Quantum computing utilizes qubits that can exist in quantum superpositions.) Tj
+0 -25 Td
+(This computational paradigm enables exponential acceleration for specific mathematical problems.) Tj
+0 -25 Td
+(Shor's algorithm can factor large integers in polynomial time, threatening classical RSA encryption.) Tj
+0 -25 Td
+(Grover's algorithm provides quadratic speedup for searching unstructured databases.) Tj
+ET
+endstream
+endobj
+6 0 obj
+<< /Length 547 >>
+stream
+BT
+/F1 18 Tf
+50 720 Td
+(Post-Quantum Cryptography and Standards - Page 2) Tj
+/F1 12 Tf
+0 -40 Td
+(Mitigation Strategies: To counter quantum threats, NIST standardized post-quantum cryptography algorithms.) Tj
+0 -25 Td
+(Primary lattice-based standards include ML-KEM for key encapsulation and ML-DSA for digital signatures.) Tj
+0 -25 Td
+(Organizations are strongly advised to begin cryptographic inventory audits immediately.) Tj
+0 -25 Td
+(Conclusion: Full migration to post-quantum cryptographic security is recommended before the year 2030.) Tj
+ET
+endstream
+endobj
+7 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 8
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000121 00000 n 
+0000000247 00000 n 
+0000000373 00000 n 
+0000000941 00000 n 
+0000001539 00000 n 
+trailer
+<< /Size 8 /Root 1 0 R >>
+startxref
+1609
+%%EOF
