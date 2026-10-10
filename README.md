@@ -194,3 +194,5 @@ This application is designed to be 100% Vercel-compatible:
 ## 📄 License
 
 MIT License. Open source and free for educational and commercial use.
+#   C h a t - w i t h - p d f  
+ 
