@@ -1,198 +1,203 @@
-# Chat with Your PDF 📄✨
+<div align="center">
 
-A modern, production-ready document question-answering web application built with **Next.js**, **React**, **Tailwind CSS**, and the **Google Gemini API**.
+# Chat with your PDF
 
-Upload any PDF document—academic papers, legal contracts, technical manuals, or reports—and chat interactively with an AI assistant. Every answer is strictly grounded in the document text, includes supporting page-number citations, and refuses to hallucinate facts outside the provided document.
+### Ask questions. Get grounded answers. See the source.
 
----
+<p>
+  A focused document chat app built with Next.js and Google Gemini.
+  Upload a PDF, ask questions in plain English, and receive answers with page-level citations.
+</p>
 
-## 🌟 Key Features
+<p>
+  <img src="https://img.shields.io/badge/Next.js-16-000000?style=flat-square&logo=next.js" alt="Next.js 16">
+  <img src="https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=20232A" alt="React 19">
+  <img src="https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white" alt="Tailwind CSS 4">
+  <img src="https://img.shields.io/badge/Gemini_API-powered-4285F4?style=flat-square&logo=google" alt="Powered by Gemini API">
+</p>
 
-- **Client-Side PDF Processing**: Extracts text page-by-page directly in the user's browser using Mozilla's `pdfjs-dist` engine via web workers. No upload file-size bottlenecks on serverless backends.
-- **Strict Document Grounding**: Enforces strict system instructions so the model answers only from the uploaded document. If an answer is not in the text, it transparently responds:
-  > *"I couldn't find this information in the uploaded document."*
-- **Page-by-Page Source Citations**: AI responses cite the exact page number and text snippets supporting the answer, presented in expandable citation cards.
-- **Sliding-Window Chunking & Context Retrieval**: Intelligent sliding-window text chunking and TF-IDF relevance scoring extract the most pertinent sections for the user's question, keeping context concise and token-efficient.
-- **Multi-Turn Conversation Memory**: Supports natural follow-up questions while maintaining document-grounded boundaries.
-- **Interactive Suggested Questions**: Instant clickable prompts (`"Summarize this document"`, `"What are the main points?"`, etc.) generated right after upload.
-- **1-Click Sample Document**: Test instantly with a built-in sample document without needing a local PDF file.
-- **Zero-Database Persistence**: Uses browser `localStorage` with React 19 `useSyncExternalStore` for seamless, hydration-safe chat persistence and fast loading.
-- **Responsive & Accessible UI**: Clean SaaS layout with Tailwind CSS that adapts flawlessly to Desktop, Laptop, Tablet, and Mobile screens.
-- **Enterprise-Grade Security**: API keys are isolated exclusively to server-side Next.js route handlers (`/api/chat`) and never exposed to the client.
+<p>
+  <a href="#quick-start">Quick start</a>
+  &nbsp;·&nbsp;
+  <a href="#features">Features</a>
+  &nbsp;·&nbsp;
+  <a href="#how-it-works">How it works</a>
+  &nbsp;·&nbsp;
+  <a href="#deployment">Deploy</a>
+</p>
 
----
-
-## 🛠️ Tech Stack
-
-| Layer | Technology | Details |
-|---|---|---|
-| **Framework** | Next.js 16 (App Router) | Server-side API routes & optimized static/SSR rendering |
-| **Frontend** | React 19 (JavaScript only) | No TypeScript, clean and beginner-friendly |
-| **Styling** | Tailwind CSS v4 | Responsive, accessible utility-first design |
-| **AI Model** | Google Gemini API | `gemini-2.5-flash` with automatic `gemini-1.5-flash` fallback |
-| **PDF Extraction** | Mozilla `pdfjs-dist` | In-browser page-by-page text extraction with web worker |
-| **Icons** | Lucide React | Clean, lightweight icon suite |
-| **Storage** | Browser LocalStorage | Lightweight persistence for active session |
+</div>
 
 ---
 
-## 🏗️ Architecture Overview
+## Overview
 
-```text
-chat-with-pdf/
-├── app/
-│   ├── api/
-│   │   └── chat/
-│   │       └── route.js          # Secure server-side Gemini route handler
-│   ├── chat/
-│   │   └── page.js               # Dedicated chat workspace with document preview
-│   ├── globals.css               # Global Tailwind CSS styling
-│   ├── layout.js                 # Root HTML layout with fonts and metadata
-│   └── page.js                   # Landing page with drag-and-drop PDF uploader
-├── components/
-│   ├── ChatWindow.js             # Chat message stream and input box
-│   ├── DocumentSidebar.js        # File statistics, suggested prompts, actions
-│   ├── FileUpload.js             # Drag-and-drop file uploader with progress bar
-│   ├── Loading.js                # Animated thinking/typing indicator
-│   ├── Message.js                # User/AI message bubble with source citation cards
-│   ├── Navbar.js                 # Top header with document status badge
-│   └── SuggestedQuestions.js     # Clickable suggestion pills
-├── lib/
-│   ├── gemini.js                 # Gemini API client with grounding prompts & JSON schema
-│   ├── pdf.js                    # PDF parser, validator, and page-by-page text extractor
-│   ├── retrieval.js              # Sliding-window chunker & TF-IDF relevance scorer
-│   ├── useStorage.js             # React 19 useSyncExternalStore hook for LocalStorage
-│   └── utils.js                  # Formatting helpers (bytes, word count, IDs)
-├── public/
-│   ├── pdf.worker.min.mjs        # Local Mozilla PDF.js worker
-│   ├── sample-document.pdf       # 2-page sample PDF for 1-click test
-│   └── standard_fonts/           # Standard PDF font glyphs
-├── scripts/
-│   ├── generate-sample-pdf.mjs   # Script to generate sample PDF binary
-│   ├── test-backend.mjs          # Unit tests for validation and chunking
-│   ├── test-gemini-formatting.mjs# Integration tests for Gemini JSON parser
-│   └── test-live-server.mjs      # Live HTTP endpoint test suite
-├── .env.example                  # Environment variable template
-├── .gitignore                    # Git ignore file (prevents secret leaks)
-├── package.json
-└── README.md
-```
+Chat with your PDF is designed for answers you can verify. Text is extracted in the browser, the most relevant passages are retrieved locally, and Gemini receives only the selected document context.
 
----
+<table>
+  <tr>
+    <td width="33%" valign="top">
+      <strong>Grounded by design</strong><br>
+      Answers are limited to the uploaded document. If the information is not present, the assistant says so.
+    </td>
+    <td width="33%" valign="top">
+      <strong>Easy to verify</strong><br>
+      Every answer can include the page number and source excerpt that supports it.
+    </td>
+    <td width="33%" valign="top">
+      <strong>Private by default</strong><br>
+      PDF text is processed in the browser and the Gemini API key stays on the server.
+    </td>
+  </tr>
+</table>
 
-## 🧠 How It Works (College Viva / Presentation Guide)
+## Features
 
-If you are presenting this project in a viva or technical interview, here is the clear 3-step explanation:
+- **PDF chat** — Upload a document or try the included sample PDF.
+- **Page-level citations** — Inspect the source page and supporting text for each answer.
+- **Local retrieval** — Sliding-window chunking and TF-IDF scoring select relevant context.
+- **Follow-up questions** — Maintain context across a conversation about the current document.
+- **Responsive interface** — A clean experience across desktop, tablet, and mobile.
+- **Session persistence** — Keep the active conversation in browser `localStorage`.
+- **Secure API route** — The Gemini key is accessed only from the server-side chat handler.
 
-### 1. In-Browser Text Extraction (`lib/pdf.js`)
-When a user uploads a PDF, the file is read as an `ArrayBuffer` and processed by Mozilla's `pdfjs-dist` inside a Web Worker. The engine iterates through every page and extracts text strings with their corresponding page number.
-- **Advantage**: Zero server upload limits (works even for 25MB documents on serverless hosts like Vercel with strict 4.5MB limits) and gives real-time percentage progress.
+## Quick start
 
-### 2. Sliding-Window Chunking & TF-IDF Retrieval (`lib/retrieval.js`)
-For documents with multiple pages, text is segmented into chunks of ~350 words with a 50-word overlap to prevent sentences from being chopped mid-context.
-When the user asks a question:
-- Query terms are filtered against a set of English stop words (`what`, `the`, `is`, etc.).
-- Each chunk is scored based on **Term Frequency (TF)**, **Inverse Document Frequency (IDF)**, multi-keyword co-occurrence, and phrase matches.
-- For broad questions (e.g. `"Summarize this document"`), representative chunks from the start, middle, and conclusion are selected.
-- The top-scoring chunks (preserving page metadata) are assembled within a safe token budget.
+### Requirements
 
-### 3. Document-Grounded Prompting (`lib/gemini.js` & `app/api/chat/route.js`)
-The server forwards the selected document excerpts and conversation history to Gemini along with a strict system instruction:
-- **Mandate**: Answer *only* using facts present in the excerpts.
-- **Citations**: Return a structured JSON response containing the answer text and an array of supporting sources `{ page: number, text: "snippet" }`.
-- **Refusal**: If the document does not contain the answer, explicitly return:
-  `"I couldn't find this information in the uploaded document."`
+- [Node.js](https://nodejs.org/) 18 or newer
+- A [Google Gemini API key](https://aistudio.google.com/)
 
----
+### 1. Install dependencies
 
-## 🚀 Getting Started
-
-### Prerequisites
-- [Node.js](https://nodejs.org/) v18.0.0 or higher
-- A free Google Gemini API Key from [Google AI Studio](https://aistudio.google.com/)
-
-### 1. Clone & Install Dependencies
 ```bash
-git clone <your-repo-url>
+git clone <your-repository-url>
 cd chat-with-pdf
 npm install
 ```
 
-### 2. Configure Environment Variables
-Copy the `.env.example` file to create a local `.env.local` file:
+### 2. Configure your API key
+
+Create `.env.local` from the included template.
+
+<details>
+<summary><strong>Windows PowerShell</strong></summary>
+
+```powershell
+Copy-Item .env.example .env.local
+```
+
+</details>
+
+<details>
+<summary><strong>macOS / Linux</strong></summary>
+
 ```bash
 cp .env.example .env.local
 ```
 
-Open `.env.local` and add your Gemini API Key:
+</details>
+
+Add your key to `.env.local`:
+
 ```env
 GEMINI_API_KEY=your_actual_gemini_api_key_here
 ```
 
-> **Note**: `.env.local` is listed in `.gitignore` and will never be committed to source control.
+> Keep `.env.local` private. It is ignored by Git and should never be committed.
 
-### 3. Run Development Server
+### 3. Start the development server
+
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Open **[http://localhost:3000](http://localhost:3000)** and select the included sample document or upload your own PDF.
 
----
+## How it works
 
-## 🧪 Testing
-
-The project includes an automated test suite verifying file validation, chunking, relevance scoring, and Gemini JSON parsing:
-
-```bash
-# Run unit & integration tests
-npm test
-
-# Run ESLint check
-npm run lint
-
-# Build for production
-npm run build
-
-# Start production server
-npm start
+```mermaid
+flowchart LR
+    A[PDF] --> B[Browser extraction]
+    B --> C[Chunking and retrieval]
+    C --> D[Secure chat route]
+    D --> E[Gemini]
+    E --> F[Answer with citations]
 ```
 
+1. **Extract** — `pdfjs-dist` reads the PDF in the browser and preserves page numbers.
+2. **Retrieve** — The document is split into overlapping chunks and ranked against the question with local TF-IDF scoring.
+3. **Answer** — The selected excerpts and conversation context are sent to `app/api/chat/route.js`.
+4. **Cite** — Gemini returns a structured answer with supporting page numbers and source snippets.
+
+## Project structure
+
+```text
+app/
+├── api/chat/route.js     # Server-side Gemini endpoint
+├── chat/page.js          # Chat workspace
+├── layout.js             # App shell and metadata
+└── page.js               # Landing page and uploader
+
+components/               # Upload, chat, navigation, and citation UI
+lib/
+├── gemini.js             # Gemini client and grounding prompt
+├── pdf.js                # PDF validation and text extraction
+├── retrieval.js          # Chunking and relevance scoring
+├── useStorage.js         # localStorage hook
+└── utils.js              # Shared helpers
+public/
+└── sample-document.pdf   # Built-in sample document
+scripts/                  # Test and utility scripts
+```
+
+## Commands
+
+| Command | Purpose |
+| :--- | :--- |
+| `npm run dev` | Start the development server |
+| `npm run build` | Create a production build |
+| `npm start` | Start the production server |
+| `npm run lint` | Run ESLint |
+| `npm test` | Run the automated tests |
+
+Before opening a pull request:
+
+```bash
+npm test
+npm run lint
+npm run build
+```
+
+## Deployment
+
+### Vercel
+
+1. Push the project to GitHub.
+2. Import the repository into [Vercel](https://vercel.com/).
+3. Add `GEMINI_API_KEY` in **Project Settings → Environment Variables**.
+4. Deploy.
+
+No database or PDF upload storage is required.
+
+## Security
+
+- The Gemini API key is used only in the server-side route handler.
+- PDF extraction happens in the browser rather than uploading the original file.
+- Server requests are validated before they reach the Gemini API.
+- Document excerpts are isolated in prompt delimiters to reduce prompt-injection risk.
+
+## Roadmap
+
+- [ ] OCR for scanned PDFs
+- [ ] Export conversations to PDF or Markdown
+- [ ] Compare multiple documents
+- [ ] Manual light and dark themes
+
+<div align="center">
+
 ---
 
-## ☁️ Deploying to Vercel
+Built with Next.js, React, Tailwind CSS, and Gemini.
 
-This application is designed to be 100% Vercel-compatible:
-
-1. Push your repository to GitHub.
-2. Go to [Vercel](https://vercel.com/) and import the repository.
-3. In the project **Environment Variables** settings, add:
-   - **Name**: `GEMINI_API_KEY`
-   - **Value**: Your Google Gemini API Key
-4. Click **Deploy**. Vercel will build and launch your application globally!
-
----
-
-## 🔒 Security Best Practices
-
-- **Zero Client Secret Exposure**: The `GEMINI_API_KEY` is accessed only inside server-side Next.js route handlers (`app/api/chat/route.js`). It is never sent to the browser.
-- **Strict File Validation**: Enforces PDF format checks and caps file sizes at 25MB before memory loading.
-- **Malicious Payload Protection**: Request inputs are strictly validated on the server with sanitized error messages.
-- **Prompt Injection Defense**: Document text is isolated inside designated `DOCUMENT EXCERPTS` delimiter blocks to prevent prompt hijacking.
-
----
-
-## 🔮 Future Improvements
-
-- [ ] Support for OCR on scanned/image-only PDFs via Tesseract.js
-- [ ] Export conversation transcripts to PDF or Markdown
-- [ ] Support for multi-document comparisons (side-by-side chat)
-- [ ] Dark / Light mode manual toggle switch
-
----
-
-## 📄 License
-
-MIT License. Open source and free for educational and commercial use.
-#   C h a t - w i t h - p d f  
- 
+</div>
