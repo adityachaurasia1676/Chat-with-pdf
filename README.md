@@ -5,7 +5,7 @@
 ### Ask questions. Get grounded answers. See the source.
 
 <p>
-  A focused document chat app built with Next.js and Google Gemini.
+  A focused document chat app built with Next.js and an OpenAI-compatible AI provider.
   Upload a PDF, ask questions in plain English, and receive answers with page-level citations.
 </p>
 
@@ -13,7 +13,7 @@
   <img src="https://img.shields.io/badge/Next.js-16-000000?style=flat-square&logo=next.js" alt="Next.js 16">
   <img src="https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=20232A" alt="React 19">
   <img src="https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white" alt="Tailwind CSS 4">
-  <img src="https://img.shields.io/badge/Gemini_API-powered-4285F4?style=flat-square&logo=google" alt="Powered by Gemini API">
+  <img src="https://img.shields.io/badge/AI_provider-configurable-4285F4?style=flat-square" alt="Configurable AI provider">
 </p>
 
 <p>
@@ -32,7 +32,7 @@
 
 ## Overview
 
-Chat with your PDF is designed for answers you can verify. Text is extracted in the browser, the most relevant passages are retrieved locally, and Gemini receives only the selected document context.
+Chat with your PDF is designed for answers you can verify. Text is extracted in the browser, the most relevant passages are retrieved locally, and the configured AI provider receives only the selected document context.
 
 <table>
   <tr>
@@ -59,14 +59,14 @@ Chat with your PDF is designed for answers you can verify. Text is extracted in 
 - **Follow-up questions** — Maintain context across a conversation about the current document.
 - **Responsive interface** — A clean experience across desktop, tablet, and mobile.
 - **Session persistence** — Keep the active conversation in browser `localStorage`.
-- **Secure API route** — The Gemini key is accessed only from the server-side chat handler.
+- **Secure API route** — The provider key is accessed only from the server-side chat handler.
 
 ## Quick start
 
 ### Requirements
 
 - [Node.js](https://nodejs.org/) 18 or newer
-- A [Google Gemini API key](https://aistudio.google.com/)
+- An API key for an OpenAI-compatible provider, such as [Groq](https://console.groq.com/keys)
 
 ### 1. Install dependencies
 
@@ -101,7 +101,10 @@ cp .env.example .env.local
 Add your key to `.env.local`:
 
 ```env
-GEMINI_API_KEY=your_actual_gemini_api_key_here
+AI_PROVIDER=groq
+AI_API_KEY=your_provider_api_key_here
+AI_BASE_URL=https://api.groq.com/openai/v1
+AI_MODEL=openai/gpt-oss-20b
 ```
 
 > Keep `.env.local` private. It is ignored by Git and should never be committed.
@@ -121,27 +124,27 @@ flowchart LR
     A[PDF] --> B[Browser extraction]
     B --> C[Chunking and retrieval]
     C --> D[Secure chat route]
-    D --> E[Gemini]
+    D --> E[Configured AI provider]
     E --> F[Answer with citations]
 ```
 
 1. **Extract** — `pdfjs-dist` reads the PDF in the browser and preserves page numbers.
 2. **Retrieve** — The document is split into overlapping chunks and ranked against the question with local TF-IDF scoring.
-3. **Answer** — The selected excerpts and conversation context are sent to `app/api/chat/route.js`.
-4. **Cite** — Gemini returns a structured answer with supporting page numbers and source snippets.
+3. **Answer** — The selected excerpts and conversation context are sent to `app/api/chat/route.js`, which securely calls the configured provider.
+4. **Cite** — The configured AI provider returns a structured answer with supporting page numbers and source snippets.
 
 ## Project structure
 
 ```text
 app/
-├── api/chat/route.js     # Server-side Gemini endpoint
+├── api/chat/route.js     # Server-side AI endpoint
 ├── chat/page.js          # Chat workspace
 ├── layout.js             # App shell and metadata
 └── page.js               # Landing page and uploader
 
 components/               # Upload, chat, navigation, and citation UI
 lib/
-├── gemini.js             # Gemini client and grounding prompt
+├── gemini.js             # AI provider client and grounding prompt
 ├── pdf.js                # PDF validation and text extraction
 ├── retrieval.js          # Chunking and relevance scoring
 ├── useStorage.js         # localStorage hook
@@ -175,16 +178,16 @@ npm run build
 
 1. Push the project to GitHub.
 2. Import the repository into [Vercel](https://vercel.com/).
-3. Add `GEMINI_API_KEY` in **Project Settings → Environment Variables**.
+3. Add `AI_API_KEY`, `AI_BASE_URL`, and `AI_MODEL` in **Project Settings → Environment Variables**.
 4. Deploy.
 
 No database or PDF upload storage is required.
 
 ## Security
 
-- The Gemini API key is used only in the server-side route handler.
+- The AI provider API key is used only in the server-side route handler.
 - PDF extraction happens in the browser rather than uploading the original file.
-- Server requests are validated before they reach the Gemini API.
+- Server requests are validated before they reach the configured AI provider.
 - Document excerpts are isolated in prompt delimiters to reduce prompt-injection risk.
 
 ## Roadmap
@@ -198,6 +201,6 @@ No database or PDF upload storage is required.
 
 ---
 
-Built with Next.js, React, Tailwind CSS, and Gemini.
+Built with Next.js, React, Tailwind CSS, and an OpenAI-compatible AI provider.
 
 </div>

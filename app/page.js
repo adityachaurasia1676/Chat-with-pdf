@@ -174,7 +174,7 @@ export default function HomePage() {
       </main>
 
       <footer className="w-full border-t border-slate-200 dark:border-slate-800 py-6 text-center text-xs text-slate-400 dark:text-slate-500">
-        <p>Chat with Your PDF • Powered by Next.js & Google Gemini API</p>
+        <p>Chat with Your PDF • Powered by Next.js & Google Gemini</p>
       </footer>
     </div>
   );
